@@ -693,7 +693,7 @@ Check_IPTables() {
 		echo "$raw_rules" | grep -Fq -- '-A OUTPUT -m set ! --match-set Skynet-MasterWL dst -m set --match-set Skynet-Master dst -j DROP' || fail="${fail}#10 "
 	fi
 
-	#11–17: IOT blocking
+	#11-17: IOT blocking
 	if Is_Enabled "$iotblocked"; then
 		if [ "$(nvram get wgs_enable)" = "1" ]; then
 			echo "$filter_rules" | grep -Fq -- '-A FORWARD -i br+ -o wgs+ -m set --match-set Skynet-IOT src -j ACCEPT' || fail="${fail}#11 "
@@ -704,10 +704,10 @@ Check_IPTables() {
 		echo "$filter_rules" | grep -Fq -- '-A FORWARD -i br+ -m set --match-set Skynet-IOT src -j DROP' || fail="${fail}#13 "
 		if [ -n "$iotports" ]; then
 			if [ "$iotproto" = "all" ] || [ "$iotproto" = "udp" ]; then
-				echo "$filter_rules" | grep -Fq -- "-A FORWARD -i br+ -m set --match-set Skynet-IOT src -o $iface -p udp -m udp -m multiport --dports $iotports -j ACCEPT" || fail="${fail}#14 "
+				echo "$filter_rules" | grep -Fq -- "-A FORWARD -i br+ -o $iface -p udp -m set --match-set Skynet-IOT src -m udp -m multiport --dports $iotports -j ACCEPT" || fail="${fail}#14 "
 			fi
 			if [ "$iotproto" = "all" ] || [ "$iotproto" = "tcp" ]; then
-				echo "$filter_rules" | grep -Fq -- "-A FORWARD -i br+ -m set --match-set Skynet-IOT src -o $iface -p tcp -m tcp -m multiport --dports $iotports -j ACCEPT" || fail="${fail}#15 "
+				echo "$filter_rules" | grep -Fq -- "-A FORWARD -i br+ -o $iface -p tcp -m set --match-set Skynet-IOT src -m tcp -m multiport --dports $iotports -j ACCEPT" || fail="${fail}#15 "
 			fi
 		else
 			if [ "$iotproto" = "all" ] || [ "$iotproto" = "udp" ]; then
@@ -719,7 +719,7 @@ Check_IPTables() {
 		fi
 	fi
 
-	#18–24: LOG rules
+	#18-24: LOG rules
 	if Is_Enabled "$logmode"; then
 		#18: OpenVPN LOG
 		if { [ "$(nvram get vpn_server1_state)" != "0" ] || [ "$(nvram get vpn_server2_state)" != "0" ]; }; then
